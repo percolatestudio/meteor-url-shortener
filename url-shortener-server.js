@@ -20,13 +20,11 @@ Router.map(function() {
       //the short url
       var url = UrlShortener.options.collection.findOne({_id: this.params.id});
 
-      // console.log(this.response);
-
       //XXX: Do we want to 404 or fail differently here?
       if (url) {
-        console.log('redirecting to:' + Meteor.absoluteUrl(url.path));
-        // this.response.redirect(301, Meteor.absoluteUrl(url.path));
-        this.end();
+        var location = Meteor.absoluteUrl(url.path.replace(/^\//, ''));
+        this.response.writeHead(301, {Location: location})
+        this.response.end();
       } else {
         this.next();
       }
