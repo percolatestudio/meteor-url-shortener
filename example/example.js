@@ -16,6 +16,8 @@ if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
     UrlShortener.options.prefix = 'short.co';
+    
+    console.log('Short for foo-bar:' + UrlShortener.shorten('foo-bar'));
   });
 }
 

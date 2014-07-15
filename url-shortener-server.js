@@ -1,6 +1,7 @@
 UrlShortener.options = {
   collection: new Meteor.Collection('shortUrls'),
-  prefix: process.env.ROOT_URL // defaults to the ROOT_URL, user to override
+  prefix: process.env.ROOT_URL, // defaults to the ROOT_URL, user to override,
+  idLength: 5 // set to 0/null to use full length id's
 }
 
 Meteor.startup(function() {
@@ -28,6 +29,9 @@ Meteor.methods({
       });
     }
 
+    if (UrlShortener.options.idLength)
+      id = id.slice(0, UrlShortener.options.idLength);
+
     return UrlShortener._join(UrlShortener.options.prefix, id);
   }
 });
@@ -39,8 +43,13 @@ Router.map(function() {
     action: function() {
       //XXX: check host headers if we want to make sure user is requesting
       //the short url
-      var url 
-        = UrlShortener.options.collection.findOne({_id: this.params.id});
+      
+      if (UrlShortener.options.idLength)
+        var query = {_id: {$regex: '^' + this.params.id}};
+      else
+        var query = {_id: this.params.id};
+
+      var url = UrlShortener.options.collection.findOne(query);
 
       //XXX: Do we want to 404 or fail differently here?
       if (url) {
