@@ -1,0 +1,8 @@
+{
+  "packages": {
+    "url-shortener": {
+      "path": ".."
+    },
+    "iron-router": {}
+  }
+}
