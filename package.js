@@ -3,7 +3,10 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-  api.use(['iron-router', 'underscore'], ['client', 'server']);
+  if (api.versionsFrom)
+    api.use(['iron:router', 'underscore'], ['client', 'server']);
+  else
+    api.use(['iron-router', 'underscore'], ['client', 'server']);
 
   api.add_files('url-shortener-common.js', ['client', 'server']);
   api.add_files('url-shortener-client.js', 'client');
